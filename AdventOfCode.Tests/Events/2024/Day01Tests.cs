@@ -28,9 +28,14 @@ namespace AdventOfCode.Tests.Events.Year2024
         }
 
         [Test]
-        [Ignore("Working on it")]
+        [Ignore("Not implemented yet")]
         public override void Part2()
         {
+            FileManager.Setup(f => f.GetLines(It.IsAny<string>())).Returns(() => InputLines);
+
+            var output = Day.Part2(It.IsAny<string>());
+
+            Assert.That(output, Is.EqualTo(31));
         }
     }
 }
