@@ -25,6 +25,19 @@ namespace AdventOfCode.Events.Year2024
         public override int Part2(string inputFilePath)
         {
             throw new NotImplementedException();
+            int result = 0;
+
+            var inputLines = FileManager.GetLines(inputFilePath);
+
+            var left = inputLines.Select(l => Convert.ToInt32(l.Split(' ').First()));
+            var right = inputLines.Select(l => Convert.ToInt32(l.Split(' ').Last()));
+
+            foreach (var l in left)
+            {
+                result += l * right.Count(r => r == l);
+            }
+
+            return result;
         }
     }
 }
