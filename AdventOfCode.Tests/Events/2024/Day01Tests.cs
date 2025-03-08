@@ -28,7 +28,6 @@ namespace AdventOfCode.Tests.Events.Year2024
         }
 
         [Test]
-        [Ignore("Not implemented yet")]
         public override void Part2()
         {
             FileManager.Setup(f => f.GetLines(It.IsAny<string>())).Returns(() => InputLines);
