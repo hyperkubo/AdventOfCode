@@ -24,7 +24,6 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part2(string inputFilePath)
         {
-            throw new NotImplementedException();
             int result = 0;
 
             var inputLines = FileManager.GetLines(inputFilePath);
