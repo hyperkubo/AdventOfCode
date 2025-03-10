@@ -15,7 +15,28 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part2(string inputFilePath)
         {
-            throw new NotImplementedException();
+            var inputLines = FileManager.GetLines(inputFilePath);
+            var reports = inputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
+
+            var unsafeReports = reports.Where(report => !IsSafe([..report]));
+            var totalSafeReports = reports.Count() - unsafeReports.Count();
+
+            int newSafeReportsCount = 0;
+            foreach (var unsafeReport in unsafeReports)
+            {
+                for(int i = 0; i < unsafeReport.Count(); i++)
+                {
+                    var report = unsafeReport.ToList();
+                    report.RemoveAt(i);
+                    if (IsSafe([.. report]))
+                    {
+                        newSafeReportsCount++;
+                        break;
+                    }
+                }
+            }
+
+            return totalSafeReports + newSafeReportsCount;
         }
 
         #region Private helper methods
