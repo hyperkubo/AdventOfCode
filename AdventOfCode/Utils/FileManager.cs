@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode.Utils
 {
-    public class FileManager : IFileManager
+    internal class FileManager : IFileManager
     {
         public List<string> GetLines(string path)
         {
