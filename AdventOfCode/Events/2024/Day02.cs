@@ -3,20 +3,18 @@ using AdventOfCode.Utils;
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 2: Red-Nosed Reports ---
-    public class Day02(IFileManager? fileManager = null) : Day(fileManager)
+    public class Day02(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override int Part1(string inputFilePath)
+        public override int Part1()
         {
-            var inputLines = FileManager.GetLines(inputFilePath);
-            var reports = inputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
+            var reports = InputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
 
             return reports.Count(report => IsSafe([..report]));
         }
 
-        public override int Part2(string inputFilePath)
+        public override int Part2()
         {
-            var inputLines = FileManager.GetLines(inputFilePath);
-            var reports = inputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
+            var reports = InputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
 
             var unsafeReports = reports.Where(report => !IsSafe([..report]));
             var totalSafeReports = reports.Count() - unsafeReports.Count();

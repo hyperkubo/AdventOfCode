@@ -4,7 +4,7 @@ using System.Text;
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 4: Ceres Search ---
-    public class Day04(IFileManager? fileManager = null) : Day(fileManager)
+    public partial class Day04(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
         static Day04()
         {
@@ -16,21 +16,19 @@ namespace AdventOfCode.Events.Year2024
         private static readonly string _magicWord = "XMAS";
         private static readonly string _reversedMagicWord;
 
-        public override int Part1(string inputFilePath)
+        public override int Part1()
         {
             int xmasCounter = 0;
 
-            var inputLines = FileManager.GetLines(inputFilePath);
-
-            xmasCounter += MagicWordOcurrences(inputLines);
-            xmasCounter += MagicWordOcurrences(VerticallyRotate(inputLines));
-            xmasCounter += MagicWordOcurrences(ClockwiseRotate(inputLines));
-            xmasCounter += MagicWordOcurrences(CounterClockwiseRotate(inputLines));
+            xmasCounter += MagicWordOcurrences(InputLines);
+            xmasCounter += MagicWordOcurrences(VerticallyRotate(InputLines));
+            xmasCounter += MagicWordOcurrences(ClockwiseRotate(InputLines));
+            xmasCounter += MagicWordOcurrences(CounterClockwiseRotate(InputLines));
 
             return xmasCounter;
         }
 
-        public override int Part2(string inputFilePath)
+        public override int Part2()
         {
             throw new NotImplementedException();
         }

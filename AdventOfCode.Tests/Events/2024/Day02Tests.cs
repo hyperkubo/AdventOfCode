@@ -1,5 +1,4 @@
 using AdventOfCode.Events.Year2024;
-using Moq;
 
 namespace AdventOfCode.Tests.Events.Year2024
 {
@@ -21,7 +20,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part1()
         {
-            var output = Day.Part1(It.IsAny<string>());
+            var output = Day.Part1();
 
             Assert.That(output, Is.EqualTo(2));
         }
@@ -29,7 +28,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part2()
         {
-            var output = Day.Part2(It.IsAny<string>());
+            var output = Day.Part2();
 
             Assert.That(output, Is.EqualTo(4));
         }

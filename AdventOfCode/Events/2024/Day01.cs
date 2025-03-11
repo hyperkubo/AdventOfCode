@@ -3,16 +3,14 @@
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 1: Historian Hysteria ---
-    public class Day01(IFileManager? fileManager = null) : Day(fileManager)
+    public class Day01(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override int Part1(string inputFilePath)
+        public override int Part1()
         {
             int result = 0;
 
-            var inputLines = FileManager.GetLines(inputFilePath);
-
-            var left = inputLines.Select(l => Convert.ToInt32(l.Split(' ').First())).OrderBy(a => a);
-            var right = inputLines.Select(l => Convert.ToInt32(l.Split(' ').Last())).OrderBy(a => a);
+            var left = InputLines.Select(l => Convert.ToInt32(l.Split(' ').First())).OrderBy(a => a);
+            var right = InputLines.Select(l => Convert.ToInt32(l.Split(' ').Last())).OrderBy(a => a);
 
             foreach (var (l, r) in left.Zip(right, (l, r) => (l, r)))
             {
@@ -22,14 +20,12 @@ namespace AdventOfCode.Events.Year2024
             return result;
         }
 
-        public override int Part2(string inputFilePath)
+        public override int Part2()
         {
             int result = 0;
 
-            var inputLines = FileManager.GetLines(inputFilePath);
-
-            var left = inputLines.Select(l => Convert.ToInt32(l.Split(' ').First()));
-            var right = inputLines.Select(l => Convert.ToInt32(l.Split(' ').Last()));
+            var left = InputLines.Select(l => Convert.ToInt32(l.Split(' ').First()));
+            var right = InputLines.Select(l => Convert.ToInt32(l.Split(' ').Last()));
 
             foreach (var l in left)
             {

@@ -4,11 +4,11 @@ using System.Text.RegularExpressions;
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 3: Mull It Over ---
-    public partial class Day03(IFileManager? fileManager = null) : Day(fileManager)
+    public partial class Day03(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override int Part1(string inputFilePath)
+        public override int Part1()
         {
-            var input = string.Join("", FileManager.GetLines(inputFilePath));
+            var input = string.Join("", InputLines);
 
             int mulResult = 0;
             foreach(Match match in MulFuncRegex().Matches(input))
@@ -22,9 +22,9 @@ namespace AdventOfCode.Events.Year2024
             return mulResult;
         }
 
-        public override int Part2(string inputFilePath)
+        public override int Part2()
         {
-            var splitByDos = string.Join("", FileManager.GetLines(inputFilePath)).Split("do()");
+            var splitByDos = string.Join("", InputLines).Split("do()");
             string mulsInDos = string.Empty;
             foreach(string dos in splitByDos)
             {

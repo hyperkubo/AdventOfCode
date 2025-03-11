@@ -2,11 +2,17 @@
 
 namespace AdventOfCode.Events
 {
-    public abstract class Day(IFileManager? fileManager) : IDay
+    public abstract class Day(string inputFilePath, IFileManager? fileManager) : IDay
     {
-        protected IFileManager FileManager { get; } = fileManager ?? new FileManager();
+        private readonly string _inputFilePath = inputFilePath;
+        private readonly IFileManager _fileManager = fileManager ?? new FileManager();
+        private List<string>? _inputLines;
+        protected List<string> InputLines { get {
+                _inputLines ??= _fileManager.GetLines(_inputFilePath);
+                return _inputLines;
+            } }
 
-        public abstract int Part1(string inputFilePath);
-        public abstract int Part2(string inputFilePath);
+        public abstract int Part1();
+        public abstract int Part2();
     }
 }

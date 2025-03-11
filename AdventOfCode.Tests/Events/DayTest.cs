@@ -14,7 +14,7 @@ namespace AdventOfCode.Tests.Events
         public void SetUp()
         {
             FileManager = new Mock<IFileManager>();
-            Day = (T)(Activator.CreateInstance(typeof(T), FileManager.Object) ?? new object());
+            Day = (T)(Activator.CreateInstance(typeof(T), It.IsAny<string>(), FileManager.Object) ?? new object());
             FileManager.Setup(f => f.GetLines(It.IsAny<string>())).Returns(() => InputLines);
         }
 
