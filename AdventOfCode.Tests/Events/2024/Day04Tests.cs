@@ -30,9 +30,11 @@ namespace AdventOfCode.Tests.Events.Year2024
         }
 
         [Test]
-        [Ignore("Part1 first =)")]
         public override void Part2()
         {
+            var result = Day.Part2(It.IsAny<string>());
+
+            Assert.That(result, Is.EqualTo(9));
         }
     }
 }
