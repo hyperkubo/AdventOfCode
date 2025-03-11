@@ -24,7 +24,24 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part2(string inputFilePath)
         {
-            throw new NotImplementedException();
+            var splitByDos = string.Join("", FileManager.GetLines(inputFilePath)).Split("do()");
+            string mulsInDos = string.Empty;
+            foreach(string dos in splitByDos)
+            {
+                mulsInDos += dos.Split("don't()")[0];
+            }
+
+            int mulResult = 0;
+
+            foreach(Match match in MulFuncRegex().Matches(mulsInDos))
+            {
+                var vals = MulValuesRegex().Match(match.Value).Value;
+                var op1 = Convert.ToInt32(vals.Split(',')[0]);
+                var op2 = Convert.ToInt32(vals.Split(',')[1]);
+                mulResult += op1 * op2;
+            }
+
+            return mulResult;
         }
 
         #region Private helpers
