@@ -30,7 +30,26 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part2()
         {
-            throw new NotImplementedException();
+            int xmasCounter = 0;
+
+            for(var row = 1; row < InputLines.Count - 1; row++)
+            {
+                for(var col = 1; col < InputLines.First().Length - 1; col++)
+                {
+                    if (InputLines[row][col] == 'A')
+                    {
+                        var ul = InputLines[row - 1][col - 1];
+                        var ur = InputLines[row - 1][col + 1];
+                        var dl = InputLines[row + 1][col - 1];
+                        var dr = InputLines[row + 1][col + 1];
+                        if (ul is 'M' or 'S' && ul + dr == 160 && ur is 'M' or 'S' && ur + dl == 160)
+                        {
+                            xmasCounter++;
+                        }
+                    }
+                }
+            }
+            return xmasCounter;
         }
 
         #region Private helpers
