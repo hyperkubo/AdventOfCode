@@ -26,7 +26,34 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part2()
         {
-            throw new NotImplementedException();
+            var updatesInOrder = UpdatesInOrder(_updates, _rules);
+            var unorderedUpdates = _updates.ToList();
+            unorderedUpdates.RemoveAll(u => updatesInOrder.Contains(u));
+
+            List<int> reorderedUpdatesMidPage = [];
+            foreach(var update in unorderedUpdates)
+            {
+                string[] updatePages;
+                bool updateRemainsSame;
+                updatePages = update.Split(',');
+                do{
+                    updateRemainsSame = true;
+                    for (int i = 0; i < updatePages.Length - 1; i++)
+                    {
+                        var seqPages = $"{updatePages[i]}|{updatePages[i + 1]}";
+                        var updateExists = _rules.Any(rule => rule == seqPages);
+                            updateRemainsSame &= updateExists;
+                        if (!updateExists)
+                        {
+                            (updatePages[i + 1], updatePages[i]) = (updatePages[i], updatePages[i + 1]);
+                        }
+                    }
+
+                } while (!updateRemainsSame);
+                var middleIdx = (int)Math.Ceiling(updatePages.Length / 2.0) - 1;
+                reorderedUpdatesMidPage.Add(Convert.ToInt32(updatePages[middleIdx]));
+            }
+            return reorderedUpdatesMidPage.Sum();
         }
 
         #region Private helpers
