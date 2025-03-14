@@ -2,11 +2,120 @@ using AdventOfCode.Utils;
 
 namespace AdventOfCode.Events.Year2024
 {
-    public class Day06(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
+    //--- Day 6: Guard Gallivant ---
+    public class Day06 : Day
     {
+        private enum LookingAt
+        {
+            Up,
+            Right,
+            Down,
+            Left
+        };
+        private readonly char _lookingRight = '>';
+        private readonly char _lookingLeftt = '<';
+        private readonly char _lookingUp = '^';
+        private readonly char _lookingDown = 'v';
+        private readonly char _obstacle = '#';
+        private readonly char[] _guardPositions;
+
+        public Day06(string inputFilePath, IFileManager? fileManager = null) : base (inputFilePath, fileManager)
+        {
+            _guardPositions =
+            [
+                _lookingRight,
+                _lookingLeftt,
+                _lookingUp,
+                _lookingDown,
+            ];
+        }
+
         public override int Part1()
         {
-            throw new NotImplementedException();
+            var guardRow = InputLines.First(l => l.IndexOfAny(_guardPositions) != -1);
+            var guardCoords = (Row: InputLines.IndexOf(guardRow), Col: guardRow.IndexOfAny(_guardPositions));
+            var guardIsLookingAt = InputLines[guardCoords.Row][guardCoords.Col] switch
+            {
+                '^' => LookingAt.Up,
+                '>' => LookingAt.Right,
+                '<' => LookingAt.Left,
+                'v' => LookingAt.Down,
+                _ => throw new Exception("Something very very strange has just happened..")
+            };
+            List<(int, int)> visitedCoords = [(guardCoords)];
+
+            var guardIsVisible = true;
+            do{
+                switch (guardIsLookingAt)
+                {
+                    case LookingAt.Up:
+                        if (guardCoords.Row == 0)
+                        {
+                            guardIsVisible = false;
+                            break;
+                        }
+                        if(InputLines[guardCoords.Row - 1][guardCoords.Col] == _obstacle)
+                        {
+                            guardIsLookingAt = LookingAt.Right;
+                        }
+                        else
+                        {
+                            guardCoords.Row -= 1;
+                        }
+                        break;
+
+                    case LookingAt.Right:
+                        if (guardCoords.Col == InputLines[0].Length - 1)
+                        {
+                            guardIsVisible = false;
+                            break;
+                        }
+                        if(InputLines[guardCoords.Row][guardCoords.Col + 1] == _obstacle)
+                        {
+                            guardIsLookingAt = LookingAt.Down;
+                        }
+                        else
+                        {
+                            guardCoords.Col += 1;
+                        }
+                        break;
+
+                    case LookingAt.Left:
+                        if (guardCoords.Col == 0)
+                        {
+                            guardIsVisible = false;
+                            break;
+                        }
+                        if(InputLines[guardCoords.Row][guardCoords.Col - 1] == _obstacle)
+                        {
+                            guardIsLookingAt = LookingAt.Up;
+                        }
+                        else
+                        {
+                            guardCoords.Col -= 1;
+                        }
+                        break;
+
+                    case LookingAt.Down:
+                        if (guardCoords.Row == InputLines.Count - 1)
+                        {
+                            guardIsVisible = false;
+                            break;
+                        }
+                        if(InputLines[guardCoords.Row + 1][guardCoords.Col] == _obstacle)
+                        {
+                            guardIsLookingAt = LookingAt.Left;
+                        }
+                        else
+                        {
+                            guardCoords.Row += 1;
+                        }
+                        break;
+                }
+                visitedCoords.Add(guardCoords);
+            }
+            while (guardIsVisible);
+            return visitedCoords.Distinct().Count();
         }
 
         public override int Part2()
