@@ -3,14 +3,36 @@ using AdventOfCode.Utils;
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 5: Print Queue ---
-    public class Day05(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
+    public class Day05 : Day
     {
+        private readonly IEnumerable<string> _rules;
+        private readonly IEnumerable<string> _updates;
+        public Day05(string inputFilePath, IFileManager? fileManager = null) : base (inputFilePath, fileManager)
+        {
+            _rules = InputLines.Where(line => line.Contains('|'));
+            _updates = InputLines.Where(line => line.Contains(','));
+        }
         public override int Part1()
         {
-            var rules = InputLines.Where(line => line.Contains('|'));
-            var updates = InputLines.Where(line => line.Contains(','));
+            return UpdatesInOrder(_updates, _rules)
+                .Sum(u =>
+                {
+                    var pagesInUpdate = u.Split(',');
+                    var middleIdx = (int)Math.Ceiling(pagesInUpdate.Length / 2.0) - 1;
+                    return Convert.ToInt32(pagesInUpdate[middleIdx]);
+                }
+            );
+        }
 
-            List<string> updatesInOrder = [];
+        public override int Part2()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Private helpers
+        private static List<string> UpdatesInOrder(IEnumerable<string> updates, IEnumerable<string> rules)
+        {
+            List<string> result = [];
             foreach (var update in updates)
             {
                 bool validUpdate = false;
@@ -22,21 +44,12 @@ namespace AdventOfCode.Events.Year2024
                 }
                 if (validUpdate)
                 {
-                    updatesInOrder.Add(update);
+                    result.Add(update);
                 }
             }
 
-            return updatesInOrder.Sum(u =>
-            {
-                var pagesInUpdate = u.Split(',');
-                var middleIdx = (int)Math.Ceiling(pagesInUpdate.Length / 2.0) - 1;
-                return Convert.ToInt32(pagesInUpdate[middleIdx]);
-            });
+            return result;
         }
-
-        public override int Part2()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }
