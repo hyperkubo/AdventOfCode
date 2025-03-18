@@ -28,9 +28,12 @@ namespace AdventOfCode.Tests.Events.Year2024
             Assert.That(result, Is.EqualTo(41));
         }
 
+        [Test]
         public override void Part2()
         {
-            throw new NotImplementedException("This is not a test u.u");
+            var result = Day.Part2();
+
+            Assert.That(result, Is.EqualTo(6));
         }
     }
 }
