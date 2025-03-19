@@ -1,4 +1,5 @@
 using AdventOfCode.Utils;
+using System.Text;
 
 namespace AdventOfCode.Events.Year2024
 {
@@ -17,6 +18,7 @@ namespace AdventOfCode.Events.Year2024
         private readonly char _lookingUp = '^';
         private readonly char _lookingDown = 'v';
         private readonly char _obstacle = '#';
+        private readonly char _freePosition = '.';
         private readonly char[] _guardPositions;
 
         public Day06(string inputFilePath, IFileManager? fileManager = null) : base (inputFilePath, fileManager)
@@ -32,18 +34,54 @@ namespace AdventOfCode.Events.Year2024
 
         public override int Part1()
         {
+            var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);
+            return VisitedCoords.Select(c => (c.Row, c.Col)).Distinct().Count();
+        }
+
+        public override int Part2()
+#warning The method works but it is extremely slow.
+        {
+            var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);
+            var visitedCoords = VisitedCoords.Select(c => (c.Row, c.Col)).Distinct();
+
+            List<string> newObstacleInLab;
+            StringBuilder sb;
+
+            int loopLabMaps = 0;
+            foreach (var (row, col) in visitedCoords)
+            {
+                if (InputLines[row][col] == _freePosition)
+                {
+                    newObstacleInLab = InputLines;
+                    sb = new StringBuilder(newObstacleInLab[row]);
+                    sb[col] = _obstacle;
+                    newObstacleInLab[row] = sb.ToString();
+                    if (VisitedCoordinates(newObstacleInLab).Loop) loopLabMaps++;
+
+                    sb[col] = _freePosition;
+                    newObstacleInLab[row] = sb.ToString();
+                }
+            }
+
+            return loopLabMaps;
+        }
+
+        #region Private helpers
+        private (List<(int Row, int Col, LookingAt LookingAt)> VisitedCoords, bool Loop) VisitedCoordinates(List<string> labMap)
+        {
+            (List<(int Row, int Col, LookingAt LookingAt)> VisitedCoords, bool Loop) result = new();
             var guardRow = InputLines.First(l => l.IndexOfAny(_guardPositions) != -1);
-            var guardCoords = (Row: InputLines.IndexOf(guardRow), Col: guardRow.IndexOfAny(_guardPositions));
+            var guardCoords = (Row: InputLines.IndexOf(guardRow), Col: guardRow.IndexOfAny(_guardPositions), LookingAt: LookingAt.Up);
             var guardIsLookingAt = InputLines[guardCoords.Row][guardCoords.Col] switch
             {
                 '^' => LookingAt.Up,
                 '>' => LookingAt.Right,
                 '<' => LookingAt.Left,
                 'v' => LookingAt.Down,
-                _ => throw new Exception("Something very very strange has just happened..")
+                _ => throw new Exception("Something very very strange has just happened...")
             };
-            List<(int, int)> visitedCoords = [(guardCoords)];
-
+            guardCoords.LookingAt = guardIsLookingAt;
+            List<(int, int, LookingAt)> visitedCoords = [(guardCoords)];
             var guardIsVisible = true;
             do{
                 switch (guardIsLookingAt)
@@ -54,7 +92,7 @@ namespace AdventOfCode.Events.Year2024
                             guardIsVisible = false;
                             break;
                         }
-                        if(InputLines[guardCoords.Row - 1][guardCoords.Col] == _obstacle)
+                        if(labMap[guardCoords.Row - 1][guardCoords.Col] == _obstacle)
                         {
                             guardIsLookingAt = LookingAt.Right;
                         }
@@ -65,12 +103,12 @@ namespace AdventOfCode.Events.Year2024
                         break;
 
                     case LookingAt.Right:
-                        if (guardCoords.Col == InputLines[0].Length - 1)
+                        if (guardCoords.Col == labMap[0].Length - 1)
                         {
                             guardIsVisible = false;
                             break;
                         }
-                        if(InputLines[guardCoords.Row][guardCoords.Col + 1] == _obstacle)
+                        if(labMap[guardCoords.Row][guardCoords.Col + 1] == _obstacle)
                         {
                             guardIsLookingAt = LookingAt.Down;
                         }
@@ -86,7 +124,7 @@ namespace AdventOfCode.Events.Year2024
                             guardIsVisible = false;
                             break;
                         }
-                        if(InputLines[guardCoords.Row][guardCoords.Col - 1] == _obstacle)
+                        if(labMap[guardCoords.Row][guardCoords.Col - 1] == _obstacle)
                         {
                             guardIsLookingAt = LookingAt.Up;
                         }
@@ -97,12 +135,12 @@ namespace AdventOfCode.Events.Year2024
                         break;
 
                     case LookingAt.Down:
-                        if (guardCoords.Row == InputLines.Count - 1)
+                        if (guardCoords.Row == labMap.Count - 1)
                         {
                             guardIsVisible = false;
                             break;
                         }
-                        if(InputLines[guardCoords.Row + 1][guardCoords.Col] == _obstacle)
+                        if(labMap[guardCoords.Row + 1][guardCoords.Col] == _obstacle)
                         {
                             guardIsLookingAt = LookingAt.Left;
                         }
@@ -112,15 +150,19 @@ namespace AdventOfCode.Events.Year2024
                         }
                         break;
                 }
+                guardCoords.LookingAt = guardIsLookingAt;
+                if(guardIsVisible && visitedCoords.Exists(c => c.Equals(guardCoords)))
+                {
+                    result.Loop = true;
+                    break;
+                }
                 visitedCoords.Add(guardCoords);
             }
             while (guardIsVisible);
-            return visitedCoords.Distinct().Count();
-        }
 
-        public override int Part2()
-        {
-            throw new NotImplementedException();
+            result.VisitedCoords = visitedCoords;
+            return result;
         }
+        #endregion
     }
 }
