@@ -32,13 +32,13 @@ namespace AdventOfCode.Events.Year2024
             ];
         }
 
-        public override int Part1()
+        public override long Part1()
         {
             var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);
             return VisitedCoords.Select(c => (c.Row, c.Col)).Distinct().Count();
         }
 
-        public override int Part2()
+        public override long Part2()
 #warning The method works but it is extremely slow.
         {
             var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);

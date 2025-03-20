@@ -16,7 +16,7 @@ namespace AdventOfCode.Events.Year2024
         private static readonly string _magicWord = "XMAS";
         private static readonly string _reversedMagicWord;
 
-        public override int Part1()
+        public override long Part1()
         {
             int xmasCounter = 0;
 
@@ -28,7 +28,7 @@ namespace AdventOfCode.Events.Year2024
             return xmasCounter;
         }
 
-        public override int Part2()
+        public override long Part2()
         {
             int xmasCounter = 0;
 

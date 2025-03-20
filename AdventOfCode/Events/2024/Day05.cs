@@ -12,7 +12,7 @@ namespace AdventOfCode.Events.Year2024
             _rules = InputLines.Where(line => line.Contains('|'));
             _updates = InputLines.Where(line => line.Contains(','));
         }
-        public override int Part1()
+        public override long Part1()
         {
             return UpdatesInOrder(_updates, _rules)
                 .Sum(u =>
@@ -24,7 +24,7 @@ namespace AdventOfCode.Events.Year2024
             );
         }
 
-        public override int Part2()
+        public override long Part2()
         {
             var updatesInOrder = UpdatesInOrder(_updates, _rules);
             var unorderedUpdates = _updates.ToList();

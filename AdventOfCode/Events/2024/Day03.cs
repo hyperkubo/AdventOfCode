@@ -6,7 +6,7 @@ namespace AdventOfCode.Events.Year2024
     //--- Day 3: Mull It Over ---
     public partial class Day03(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override int Part1()
+        public override long Part1()
         {
             var input = string.Join("", InputLines);
 
@@ -22,7 +22,7 @@ namespace AdventOfCode.Events.Year2024
             return mulResult;
         }
 
-        public override int Part2()
+        public override long Part2()
         {
             var splitByDos = string.Join("", InputLines).Split("do()");
             string mulsInDos = string.Empty;
