@@ -42,7 +42,23 @@ namespace AdventOfCode.Events.Year2024
 
         public override long Part2()
         {
-            throw new NotImplementedException();
+            List<Position> antinodesPosition = [];
+            IndexCombinations(1);
+            SaveAntennasCoordinates();
+
+            foreach(var antennaType in _antennasCoordinates)
+            {
+                var antennasCombinations = IndexCombinations(antennaType.Value.Count);
+
+                foreach(var antennaPair in antennasCombinations)
+                {
+                    Position antenna1 = antennaType.Value.ElementAt(antennaPair.Item1);
+                    Position antenna2 = antennaType.Value.ElementAt(antennaPair.Item2);
+                    antinodesPosition.AddRange(AntinodesInLine(antenna1, antenna2));
+                }
+            }
+
+            return antinodesPosition.Distinct(new PositionEqualityComparer()).Count();
         }
 
         #region Private helpers
@@ -102,6 +118,33 @@ namespace AdventOfCode.Events.Year2024
                     }
                 }
             }
+        }
+
+        private List<Position> AntinodesInLine(Position antenna1, Position antenna2)
+        {
+            Position ant1 = new(antenna1.Row, antenna1.Col);
+            Position ant2 = new(antenna2.Row, antenna2.Col);
+            List<Position> antinodes = [];
+            Position temp;
+            do
+            {
+                antinodes.Add(ant1);
+                temp = Position.AntinodeToAntenna1(ant1, ant2);
+                ant2 = new Position(ant1.Row, ant1.Col);
+                ant1 = new Position(temp.Row, temp.Col);
+            } while (!PositionOutOfBounds(temp));
+
+            ant1 = new(antenna1.Row, antenna1.Col);
+            ant2 = new(antenna2.Row, antenna2.Col);
+            do
+            {
+                antinodes.Add(ant2);
+                temp = Position.AntinodeToAntenna1(ant2, ant1);
+                ant1 = new Position(ant2.Row, ant2.Col);
+                ant2 = new Position(temp.Row, temp.Col);
+            } while (!PositionOutOfBounds(temp));
+
+            return antinodes;
         }
 
         private bool PositionOutOfBounds(Position position)
