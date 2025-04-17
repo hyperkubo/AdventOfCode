@@ -1,39 +1,24 @@
 using AdventOfCode.Utils;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AdventOfCode.Events.Year2024
 {
     //--- Day 8: Resonant Collinearity ---
     public class Day08(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        private readonly Dictionary<char, List<(int Row, int Col)>> _antennasCoordinates = [];
+        private readonly Dictionary<char, List<Position>> _antennasCoordinates = [];
         private readonly Dictionary<int, List<(int, int)>> _indexCombinations = new()
         {
             { 1, new List<(int, int)>() },
             { 2, [(0,1)] }
         };
         private readonly char _freePosition = '.';
+
         public override long Part1()
         {
-            List<(int Row, int Col)> antinodesCoords = [];
+            List<Position> antinodesPosition = [];
             IndexCombinations(1);
-            for(int row = 0; row < InputLines.Count; row++)
-            {
-                for(int col = 0; col < InputLines[0].Length; col++)
-                {
-                    var currElement = InputLines[row][col];
-                    if (currElement != _freePosition)
-                    {
-                        if (_antennasCoordinates.TryGetValue(currElement, out List<(int Row, int Col)>? value))
-                        {
-                            value.Add((row, col));
-                        }
-                        else
-                        {
-                            _antennasCoordinates.Add(currElement, [(row, col)]);
-                        }
-                    }
-                }
-            }
+            SaveAntennasCoordinates();
 
             foreach(var antennaType in _antennasCoordinates)
             {
@@ -41,22 +26,18 @@ namespace AdventOfCode.Events.Year2024
 
                 foreach(var antennaPair in antennasCombinations)
                 {
-                    var (ant1row, ant1col) = antennaType.Value.ElementAt(antennaPair.Item1);
-                    var (ant2row, ant2col) = antennaType.Value.ElementAt(antennaPair.Item2);
+                    Position antenna1 = antennaType.Value.ElementAt(antennaPair.Item1);
+                    Position antenna2 = antennaType.Value.ElementAt(antennaPair.Item2);
 
-                    var antinode1Row = ant1row - (ant2row - ant1row);
-                    var antinode1Col = ant1col - (ant2col - ant1col);
-                    antinodesCoords.Add((antinode1Row, antinode1Col));
-
-                    var antinode2Row = ant2row + (ant2row - ant1row);
-                    var antinode2Col = ant2col + (ant2col - ant1col);
-                    antinodesCoords.Add((antinode2Row, antinode2Col));
+                    var newAntinodePosition = Position.AntinodeToAntenna1(antenna1, antenna2);
+                    antinodesPosition.Add(newAntinodePosition);
+                    newAntinodePosition = Position.AntinodeToAntenna2(antenna1, antenna2);
+                    antinodesPosition.Add(newAntinodePosition);
                 }
             }
-            return antinodesCoords
-                .Distinct()
-                .Count(c => c.Row >= 0 && c.Row < InputLines.Count
-                         && c.Col >= 0 && c.Col < InputLines[0].Length);
+            return antinodesPosition
+                .Distinct(new PositionEqualityComparer())
+                .Count(p => !PositionOutOfBounds(p));
         }
 
         public override long Part2()
@@ -99,6 +80,69 @@ namespace AdventOfCode.Events.Year2024
             }
 
             return result;
+        }
+
+        private void SaveAntennasCoordinates()
+        {
+            for(int row = 0; row < InputLines.Count; row++)
+            {
+                for(int col = 0; col < InputLines[0].Length; col++)
+                {
+                    var currElement = InputLines[row][col];
+                    if (currElement != _freePosition)
+                    {
+                        if (_antennasCoordinates.TryGetValue(currElement, out List<Position>? value))
+                        {
+                            value.Add(new Position(row, col));
+                        }
+                        else
+                        {
+                            _antennasCoordinates.Add(currElement, [new Position(row, col)]);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool PositionOutOfBounds(Position position)
+        {
+            return position.Row < 0 || position.Row >= InputLines.Count
+                || position.Col < 0 || position.Col >= InputLines[0].Length;
+        }
+
+        class Position(int row, int col)
+        {
+            public int Row { get; } = row;
+            public int Col { get; } = col;
+
+            public static Position AntinodeToAntenna1(Position antenna1, Position antenna2)
+            {
+                var row = antenna1.Row - (antenna2.Row - antenna1.Row);
+                var col = antenna1.Col - (antenna2.Col - antenna1.Col);
+
+                return new Position(row, col);
+            }
+            public static Position AntinodeToAntenna2(Position antenna1, Position antenna2)
+            {
+                var row = antenna2.Row + (antenna2.Row - antenna1.Row);
+                var col = antenna2.Col + (antenna2.Col - antenna1.Col);
+
+                return new Position(row, col);
+            }
+        }
+        class PositionEqualityComparer : IEqualityComparer<Position>
+        {
+            public bool Equals(Position? x, Position? y)
+            {
+                if (x is null || y is null) return false;
+
+                return x.Row == y.Row && x.Col == y.Col;
+            }
+
+            public int GetHashCode([DisallowNull] Position obj)
+            {
+                return obj.Row * obj.Col;
+            }
         }
         #endregion
     }
