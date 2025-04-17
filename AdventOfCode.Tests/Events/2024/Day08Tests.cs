@@ -31,9 +31,11 @@ namespace AdventOfCode.Tests.Events.Year2024
         }
 
         [Test]
-        [Ignore("Did you finish part one...?")]
         public override void Part2()
         {
+            var result = Day.Part2();
+
+            Assert.That(result, Is.EqualTo(34));
         }
     }
 }
