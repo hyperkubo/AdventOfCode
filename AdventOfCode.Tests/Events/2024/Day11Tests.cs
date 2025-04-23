@@ -11,6 +11,7 @@ namespace AdventOfCode.Tests.Events.Year2024
             ];
         }
 
+        [Test]
         public override void Part1()
         {
             var result = Day.Part1();
