@@ -24,7 +24,14 @@ namespace AdventOfCode.Events.Year2024
 
         public override long Part2()
         {
-            throw new NotImplementedException();
+            FindTrailheads();
+
+            foreach(var hikingHead in _hikingHeads)
+            {
+                GetNextHikingTrailSteps(hikingHead);
+            }
+
+            return _hikingHeads.Sum(h => h.Rating);
         }
 
         #region Private methods
@@ -51,6 +58,7 @@ namespace AdventOfCode.Events.Year2024
                 {
                     start.DifferentHikingEnds.Add(hikingTrail);
                 }
+                start.Rating++;
                 return;
             }
             var nextCol = hikingTrail.Col + 1;
@@ -86,6 +94,7 @@ namespace AdventOfCode.Events.Year2024
             public int Row { get; set; } = row;
             public int Col { get; set; } = col;
             public int Score => DifferentHikingEnds.Count;
+            public int Rating { get; set; }
             public List<HikingTrail> DifferentHikingEnds { get; set; } = [];
             public List<HikingTrail> NextPositions { get; set; } = [];
         }
