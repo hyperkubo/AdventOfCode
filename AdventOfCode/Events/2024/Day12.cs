@@ -17,7 +17,11 @@ namespace AdventOfCode.Events.Year2024
 
         public override long Part2()
         {
-            throw new NotImplementedException();
+            SeparateGroups();
+
+            _plantGroups.ForEach(g => g.CalculateSides());
+
+            return _plantGroups.Sum(g => g.DiscountPrice);
         }
 
         #region Private methods
@@ -62,17 +66,19 @@ namespace AdventOfCode.Events.Year2024
         class PlantGroup(char type, int row, int col)
         {
             public char Type { get; } = type;
+            public int CompleteSides { get; private set; }
             public List<Coordinates> PlantsPositions { get; } = [new(row, col)];
-            List<Coordinates> Borders { get; } = [
-                new(row - 1, col),
-                new(row + 1, col),
-                new(row, col - 1),
-                new(row, col + 1)
+            List<Border> Borders { get; } = [
+                new(row - 1, col, BorderPosition.Upper),
+                new(row + 1, col, BorderPosition.Lower),
+                new(row, col - 1, BorderPosition.Left),
+                new(row, col + 1, BorderPosition.Right)
             ];
 
             public int Perimeter => Borders.Count;
             public int Area => PlantsPositions.Count;
             public int Price => Perimeter * Area;
+            public int DiscountPrice => CompleteSides * Area;
 
             public void AddPlant(int row, int col)
             {
@@ -86,19 +92,19 @@ namespace AdventOfCode.Events.Year2024
                 int nextRow = row + 1;
                 if(!PlantsPositions.Exists(pp => pp.Row == row && pp.Col == prevCol))
                 {
-                    Borders.Add(new(row, prevCol));
+                    Borders.Add(new(row, prevCol, BorderPosition.Left));
                 }
                 if(!PlantsPositions.Exists(pp => pp.Row == row && pp.Col == nextCol))
                 {
-                    Borders.Add(new(row, nextCol));
+                    Borders.Add(new(row, nextCol, BorderPosition.Right));
                 }
                 if(!PlantsPositions.Exists(pp => pp.Row == prevRow && pp.Col == col))
                 {
-                    Borders.Add(new(prevRow, col));
+                    Borders.Add(new(prevRow, col, BorderPosition.Upper));
                 }
                 if(!PlantsPositions.Exists(pp => pp.Row == nextRow && pp.Col == col))
                 {
-                    Borders.Add(new(nextRow, col));
+                    Borders.Add(new(nextRow, col, BorderPosition.Lower));
                 }
             }
 
@@ -110,10 +116,49 @@ namespace AdventOfCode.Events.Year2024
                 });
             }
 
+            public void CalculateSides()
+            {
+                var upperBorders = Borders.Where(b => b.Type == BorderPosition.Upper).GroupBy(b => b.Row).Select(g => new {Row = g.Key, Cols = g.Select(v => v.Col).ToList()});
+                var lowerBorders = Borders.Where(b => b.Type == BorderPosition.Lower).GroupBy(b => b.Row).Select(g => new {Row = g.Key, Cols = g.Select(v => v.Col).ToList()});
+                var rightBorders = Borders.Where(b => b.Type == BorderPosition.Right).GroupBy(b => b.Col).Select(g => new {Col = g.Key, Rows = g.Select(v => v.Row).ToList()});
+                var leftBorders = Borders.Where(b => b.Type == BorderPosition.Left).GroupBy(b => b.Col).Select(g => new {Col = g.Key, Rows = g.Select(v => v.Row).ToList()});
+
+                upperBorders.ToList().ForEach(b => CompleteSides += BordersInRow([.. b.Cols]));
+                rightBorders.ToList().ForEach(b => CompleteSides += BordersInRow([.. b.Rows]));
+                lowerBorders.ToList().ForEach(b => CompleteSides += BordersInRow([.. b.Cols]));
+                leftBorders.ToList().ForEach(b => CompleteSides += BordersInRow([.. b.Rows]));
+            }
+
+            private static int BordersInRow(int[] positions)
+            {
+                positions = [.. positions.Order()];
+                int borders = 1;
+
+                for(int i = 1; i < positions.Length; i++)
+                {
+                    if (positions[i] - positions[i - 1] > 1) borders++;
+                }
+
+                return borders;
+            }
+
             public class Coordinates(int row, int col)
             {
                 public int Row { get; set; } = row;
                 public int Col { get; set; } = col;
+            }
+
+            enum BorderPosition
+            {
+                Upper,
+                Right,
+                Lower,
+                Left
+            }
+
+            class Border(int row, int col, BorderPosition position) : Coordinates(row, col)
+            {
+                public BorderPosition Type { get; } = position;
             }
         }
         #endregion
