@@ -6,23 +6,23 @@ namespace AdventOfCode.Events.Year2024
     //--- Day 13: Claw Contraption ---
     public partial class Day13(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        private readonly int _buttonACost = 3;
-        private readonly int _buttonBCost = 1;
         private readonly List<ClawMachine> _machines = [];
         public override long Part1()
         {
             CreateClawMachines();
             _machines.ForEach(m => m.GaussJordan());
-            return _machines.Where(m => m.HasSolution).Sum(m => (m.ButtonAHits * _buttonACost) + (m.ButtonBHits * _buttonBCost));
+            return _machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
         }
 
         public override long Part2()
         {
-            throw new NotImplementedException();
+            CreateClawMachines(10000000000000);
+            _machines.ForEach(m => m.GaussJordan());
+            return _machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
         }
 
         #region Private methods
-        private void CreateClawMachines()
+        private void CreateClawMachines(long missingPriceSteps = 0)
         {
             Regex regexDigits = DigitsRegex();
             ClawMachine newMachine;
@@ -42,32 +42,35 @@ namespace AdventOfCode.Events.Year2024
 
                 x = Convert.ToInt32(matches.ElementAt(4).Value);
                 y = Convert.ToInt32(matches.ElementAt(5).Value);
-                newMachine.Price = (x, y);
+                newMachine.Prize = (x + missingPriceSteps, y + missingPriceSteps);
 
                 _machines.Add(newMachine);
-                newMachine.GaussJordan();
             }
         }
 
         class ClawMachine()
         {
-            public (int X, int Y) ButtonA { get; set; }
-            public (int X, int Y) ButtonB { get; set; }
-            public (int X, int Y) Price { get; set; }
+            public (long X, long Y) ButtonA { get; set; }
+            public (long X, long Y) ButtonB { get; set; }
+            public (long X, long Y) Prize { get; set; }
+            private static readonly int _buttonACost = 3;
+            private static readonly int _buttonBCost = 1;
             private readonly Fraction[,] _matrix = new Fraction[2, 3];
             public bool HasSolution => _matrix[0, 2].Numerator % _matrix[0, 2].Denominator == 0 && _matrix[1,2].Numerator % _matrix[1,2].Denominator == 0;
             public long ButtonAHits => HasSolution ? _matrix[0, 2].Numerator / _matrix[0, 2].Denominator : -1;
             public long ButtonBHits => HasSolution ? _matrix[1, 2].Numerator / _matrix[1, 2].Denominator : -1;
+            public long ButtonATotalCost => HasSolution ? ButtonAHits * _buttonACost : 0;
+            public long ButtonBTotalCost => HasSolution ? ButtonBHits * _buttonBCost : 0;
 
             public void GaussJordan()
             {
                 _matrix[0, 0] = new Fraction(1);
                 _matrix[0, 1] = new Fraction(ButtonB.X) / new Fraction(ButtonA.X);
-                _matrix[0, 2] = new Fraction(Price.X) / new Fraction(ButtonA.X);
+                _matrix[0, 2] = new Fraction(Prize.X) / new Fraction(ButtonA.X);
 
                 _matrix[1, 0] = new Fraction(0);
                 _matrix[1, 1] = (new Fraction(-ButtonA.Y) * _matrix[0, 1]) + new Fraction(ButtonB.Y);
-                _matrix[1, 2] = (new Fraction(-ButtonA.Y) * _matrix[0, 2]) + new Fraction(Price.Y);
+                _matrix[1, 2] = (new Fraction(-ButtonA.Y) * _matrix[0, 2]) + new Fraction(Prize.Y);
 
                 _matrix[1, 2] = _matrix[1, 2] / _matrix[1, 1];
                 _matrix[1, 1] = new Fraction(1);
@@ -86,8 +89,16 @@ namespace AdventOfCode.Events.Year2024
             }
             public Fraction(long numerator, long denominator)
             {
-                Numerator = numerator;
-                Denominator = denominator;
+                if(numerator % denominator == 0)
+                {
+                    Numerator = numerator / denominator;
+                    Denominator = 1;
+                }
+                else
+                {
+                    Numerator = numerator;
+                    Denominator = denominator;
+                }
             }
             public long Numerator { get; private set; }
             public long Denominator { get; private set; }
