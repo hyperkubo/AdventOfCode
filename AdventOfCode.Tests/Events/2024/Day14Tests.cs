@@ -25,7 +25,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part1()
         {
-            var result = Day.Part1();
+            var result = Day.Part1(horizontalTiles: 7, verticalTiles: 11);
 
             Assert.That(result, Is.EqualTo(12));
         }
