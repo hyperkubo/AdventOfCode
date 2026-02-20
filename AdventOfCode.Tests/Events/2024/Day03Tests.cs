@@ -9,7 +9,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = ["xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"];
 
-            var result = Day.Part1();
+            var result = Day.Part1<int>();
 
             Assert.That(result, Is.EqualTo(161));
         }
@@ -19,7 +19,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = ["xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"];
 
-            var result = Day.Part2();
+            var result = Day.Part2<int>();
 
             Assert.That(result, Is.EqualTo(48));
         }

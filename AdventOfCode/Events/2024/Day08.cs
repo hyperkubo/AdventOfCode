@@ -14,7 +14,7 @@ namespace AdventOfCode.Events.Year2024
         };
         private readonly char _freePosition = '.';
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             List<Position> antinodesPosition = [];
             IndexCombinations(1);
@@ -35,12 +35,12 @@ namespace AdventOfCode.Events.Year2024
                     antinodesPosition.Add(newAntinodePosition);
                 }
             }
-            return antinodesPosition
+            return (T)(object)antinodesPosition
                 .Distinct(new PositionEqualityComparer())
                 .Count(p => !PositionOutOfBounds(p));
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             List<Position> antinodesPosition = [];
             IndexCombinations(1);
@@ -58,7 +58,7 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return antinodesPosition.Distinct(new PositionEqualityComparer()).Count();
+            return (T)(object)antinodesPosition.Distinct(new PositionEqualityComparer()).Count();
         }
 
         #region Private helpers

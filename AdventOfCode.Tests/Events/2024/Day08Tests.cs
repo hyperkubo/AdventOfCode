@@ -25,7 +25,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part1()
         {
-            var result = Day.Part1();
+            var result = Day.Part1<int>();
 
             Assert.That(result, Is.EqualTo(14));
         }
@@ -33,7 +33,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part2()
         {
-            var result = Day.Part2();
+            var result = Day.Part2<int>();
 
             Assert.That(result, Is.EqualTo(34));
         }

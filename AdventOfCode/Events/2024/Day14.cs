@@ -49,13 +49,13 @@ namespace AdventOfCode.Events.Year2024
             return robotsInQuadrants.Aggregate((a, b) => a * b);
         }
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             throw new NotImplementedException();
 #warning Use the other Part1 =)
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             throw new NotImplementedException();
         }

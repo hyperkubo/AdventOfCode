@@ -18,7 +18,7 @@ namespace AdventOfCode.Events.Year2024
         private int MaxCol => InputLines.First().Length - 1;
         private int MaxColWide => (InputLines.First().Length * 2) - 1;
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             _warehouseMap = [.. InputLines.GetRange(0, InputLines.Count - 2).Select(line => new StringBuilder(line))];
             int rowRobot = _warehouseMap.ToList().FindIndex(line => line.ToString().Contains(Robot));
@@ -47,10 +47,10 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return boxesCoords.Sum(c => (c.Row * 100) + c.Col);
+            return (T)(object)boxesCoords.Sum(c => (c.Row * 100) + c.Col);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             _warehouseMap = [.. InputLines.GetRange(0, InputLines.Count - 2).Select(line => new StringBuilder(line))];
             _warehouseMap.ToList().ForEach(line =>
@@ -86,7 +86,7 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return boxesCoords.Sum(c => (c.Row * 100) + c.Col);
+            return (T)(object)boxesCoords.Sum(c => (c.Row * 100) + c.Col);
         }
 
         #region Private methods

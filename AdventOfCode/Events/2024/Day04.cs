@@ -16,7 +16,7 @@ namespace AdventOfCode.Events.Year2024
         private static readonly string _magicWord = "XMAS";
         private static readonly string _reversedMagicWord;
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             int xmasCounter = 0;
 
@@ -25,10 +25,10 @@ namespace AdventOfCode.Events.Year2024
             xmasCounter += MagicWordOcurrences(ClockwiseRotate(InputLines));
             xmasCounter += MagicWordOcurrences(CounterClockwiseRotate(InputLines));
 
-            return xmasCounter;
+            return (T)(object)xmasCounter;
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             int xmasCounter = 0;
 
@@ -49,7 +49,7 @@ namespace AdventOfCode.Events.Year2024
                     }
                 }
             }
-            return xmasCounter;
+            return (T)(object)xmasCounter;
         }
 
         #region Private helpers

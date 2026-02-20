@@ -12,7 +12,7 @@ namespace AdventOfCode.Events
                 return _inputLines;
             } }
 
-        public abstract long Part1();
-        public abstract long Part2();
+        public abstract T Part1<T>();
+        public abstract T Part2<T>();
     }
 }

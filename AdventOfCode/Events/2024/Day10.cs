@@ -10,7 +10,7 @@ namespace AdventOfCode.Events.Year2024
         private readonly List<HikingTrail> _hikingHeads = [];
         private int MaxRow => InputLines.Count - 1;
         private int MaxCol => InputLines.First().Length - 1;
-        public override long Part1()
+        public override T Part1<T>()
         {
             FindTrailheads();
 
@@ -19,10 +19,10 @@ namespace AdventOfCode.Events.Year2024
                 GetNextHikingTrailSteps(hikingHead);
             }
 
-            return _hikingHeads.Sum(h => h.Score);
+            return (T)(object)_hikingHeads.Sum(h => h.Score);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             FindTrailheads();
 
@@ -31,7 +31,7 @@ namespace AdventOfCode.Events.Year2024
                 GetNextHikingTrailSteps(hikingHead);
             }
 
-            return _hikingHeads.Sum(h => h.Rating);
+            return (T)(object)_hikingHeads.Sum(h => h.Rating);
         }
 
         #region Private methods

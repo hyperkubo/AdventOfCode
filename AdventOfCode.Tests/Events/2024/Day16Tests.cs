@@ -46,7 +46,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = [.. _inputLinesPartA];
 
-            var result = Day.Part1();
+            var result = Day.Part1<int>();
 
             Assert.That(result, Is.EqualTo(7036));
         }
@@ -56,7 +56,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = [.. _inputLinesPartB];
 
-            var result = Day.Part1();
+            var result = Day.Part1<int>();
 
             Assert.That(result, Is.EqualTo(11048));
         }
@@ -66,7 +66,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = [.. _inputLinesPartA];
 
-            var result = Day.Part2();
+            var result = Day.Part2<long>();
 
             Assert.That(result, Is.EqualTo(45));
         }
@@ -76,7 +76,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         {
             InputLines = [.. _inputLinesPartB];
 
-            var result = Day.Part2();
+            var result = Day.Part2<long>();
 
             Assert.That(result, Is.EqualTo(64));
         }

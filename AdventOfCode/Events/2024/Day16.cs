@@ -12,7 +12,7 @@ namespace AdventOfCode.Events.Year2024
         private int MaxRow => InputLines.Count - 2;
         private int MaxCol => InputLines.First().Length - 1;
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             int startRow = InputLines.FindIndex(line => line.Contains(Start));
             int startCol = InputLines[startRow].IndexOf(Start);
@@ -37,7 +37,7 @@ namespace AdventOfCode.Events.Year2024
 
                 if (row == endRow && col == endCol)
                 {
-                    return cost;
+                    return (T)(object)cost;
                 }
 
                 int[] rowsMovs = { -1, 1, 0, 0 };
@@ -75,10 +75,10 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return -1;
+            return (T)(object)-1;
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             throw new NotImplementedException();
         }

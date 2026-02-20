@@ -14,7 +14,7 @@ namespace AdventOfCode.Tests.Events.Year2024
         [Test]
         public override void Part1()
         {
-            var result = Day.Part1();
+            var result = Day.Part1<long>();
 
             Assert.That(result, Is.EqualTo(55312));
         }

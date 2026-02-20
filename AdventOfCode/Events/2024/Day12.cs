@@ -8,20 +8,20 @@ namespace AdventOfCode.Events.Year2024
         private readonly List<PlantGroup> _plantGroups = [];
         private int MaxRow => InputLines.Count - 1;
         private int MaxCol => InputLines.First().Length - 1;
-        public override long Part1()
+        public override T Part1<T>()
         {
             SeparateGroups();
 
-            return _plantGroups.Sum(g => g.Price);
+            return (T)(object)_plantGroups.Sum(g => g.Price);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             SeparateGroups();
 
             _plantGroups.ForEach(g => g.CalculateSides());
 
-            return _plantGroups.Sum(g => g.DiscountPrice);
+            return (T)(object)_plantGroups.Sum(g => g.DiscountPrice);
         }
 
         #region Private methods

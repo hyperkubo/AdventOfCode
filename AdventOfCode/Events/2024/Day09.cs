@@ -9,7 +9,7 @@ namespace AdventOfCode.Events.Year2024
         private readonly List<long> _diskBlocks = [];
         private int _maxFileId = 0;
         private List<(int StartsAt, int Size)> _freeSizeMap = [];
-        public override long Part1()
+        public override T Part1<T>()
         {
             _diskMap = InputLines[0];
             SetDiskBlocks();
@@ -19,12 +19,12 @@ namespace AdventOfCode.Events.Year2024
                 MoveBlockToFreeSpace();
             }
 
-            return _diskBlocks
+            return (T)(object)_diskBlocks
                 .Where(b => b != -1)
                 .Select((block, index) => block * index)
                 .Sum();
         }
-        public override long Part2()
+        public override T Part2<T>()
         {
             _diskMap = InputLines[0];
             SetDiskBlocks();
@@ -34,7 +34,7 @@ namespace AdventOfCode.Events.Year2024
                 MoveFileToFreeSpace(i);
             }
 
-            return _diskBlocks
+            return (T)(object)_diskBlocks
                 .Select((block, index) => new { block, index })
                 .Where(b => b.block >= 0)
                 .Select(b => b.block * b.index)

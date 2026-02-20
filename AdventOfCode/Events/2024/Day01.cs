@@ -5,7 +5,7 @@ namespace AdventOfCode.Events.Year2024
     //--- Day 1: Historian Hysteria ---
     public class Day01(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override long Part1()
+        public override T Part1<T>()
         {
             int result = 0;
 
@@ -17,10 +17,10 @@ namespace AdventOfCode.Events.Year2024
                 result += Math.Abs(l - r);
             }
 
-            return result;
+            return (T)(object)result;
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             int result = 0;
 
@@ -32,7 +32,7 @@ namespace AdventOfCode.Events.Year2024
                 result += l * right.Count(r => r == l);
             }
 
-            return result;
+            return (T)(object)result;
         }
     }
 }

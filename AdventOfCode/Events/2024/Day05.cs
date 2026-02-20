@@ -12,9 +12,9 @@ namespace AdventOfCode.Events.Year2024
             _rules = InputLines.Where(line => line.Contains('|'));
             _updates = InputLines.Where(line => line.Contains(','));
         }
-        public override long Part1()
+        public override T Part1<T>()
         {
-            return UpdatesInOrder(_updates, _rules)
+            return (T)(object)UpdatesInOrder(_updates, _rules)
                 .Sum(u =>
                 {
                     var pagesInUpdate = u.Split(',');
@@ -24,7 +24,7 @@ namespace AdventOfCode.Events.Year2024
             );
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             var updatesInOrder = UpdatesInOrder(_updates, _rules);
             var unorderedUpdates = _updates.ToList();
@@ -53,7 +53,7 @@ namespace AdventOfCode.Events.Year2024
                 var middleIdx = (int)Math.Ceiling(updatePages.Length / 2.0) - 1;
                 reorderedUpdatesMidPage.Add(Convert.ToInt32(updatePages[middleIdx]));
             }
-            return reorderedUpdatesMidPage.Sum();
+            return (T)(object)reorderedUpdatesMidPage.Sum();
         }
 
         #region Private helpers

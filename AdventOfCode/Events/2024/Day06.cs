@@ -32,13 +32,13 @@ namespace AdventOfCode.Events.Year2024
             ];
         }
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);
-            return VisitedCoords.Select(c => (c.Row, c.Col)).Distinct().Count();
+            return (T)(object)VisitedCoords.Select(c => (c.Row, c.Col)).Distinct().Count();
         }
 
-        public override long Part2()
+        public override T Part2<T>()
 #warning The method works but it is extremely slow.
         {
             var (VisitedCoords, Loop) = VisitedCoordinates(InputLines);
@@ -63,7 +63,7 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return loopLabMaps;
+            return (T)(object)loopLabMaps;
         }
 
         #region Private helpers

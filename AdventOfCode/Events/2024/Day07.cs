@@ -18,14 +18,14 @@ namespace AdventOfCode.Events.Year2024
                 return (TestValue: Convert.ToInt64(testAndOperands[0]), Operands: operands);
             });
         }
-        public override long Part1()
+        public override T Part1<T>()
         {
-            return SumOfTrueEquations(2);
+            return (T)(object)SumOfTrueEquations(2);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
-            return SumOfTrueEquations(3);
+            return (T)(object)SumOfTrueEquations(3);
         }
 
         #region Private helpers

@@ -6,7 +6,7 @@ namespace AdventOfCode.Events.Year2024
     //--- Day 3: Mull It Over ---
     public partial class Day03(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override long Part1()
+        public override T Part1<T>()
         {
             var input = string.Join("", InputLines);
 
@@ -19,10 +19,10 @@ namespace AdventOfCode.Events.Year2024
                 mulResult += op1 * op2;
             }
 
-            return mulResult;
+            return (T)(object)mulResult;
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             var splitByDos = string.Join("", InputLines).Split("do()");
             string mulsInDos = string.Empty;
@@ -41,7 +41,7 @@ namespace AdventOfCode.Events.Year2024
                 mulResult += op1 * op2;
             }
 
-            return mulResult;
+            return (T)(object)mulResult;
         }
 
         #region Private helpers

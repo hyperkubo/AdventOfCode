@@ -5,14 +5,14 @@ namespace AdventOfCode.Events.Year2024
     //--- Day 2: Red-Nosed Reports ---
     public class Day02(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
-        public override long Part1()
+        public override T Part1<T>()
         {
             var reports = InputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
 
-            return reports.Count(report => IsSafe([..report]));
+            return (T)(object)reports.Count(report => IsSafe([..report]));
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             var reports = InputLines.Select(l => l.Split(' ').Select(n => Convert.ToInt32(n)));
 
@@ -34,7 +34,7 @@ namespace AdventOfCode.Events.Year2024
                 }
             }
 
-            return totalSafeReports + newSafeReportsCount;
+            return (T)(object)(totalSafeReports + newSafeReportsCount);
         }
 
         #region Private helper methods

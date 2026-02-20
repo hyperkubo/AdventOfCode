@@ -7,18 +7,18 @@ namespace AdventOfCode.Events.Year2024
     public partial class Day13(string inputFilePath, IFileManager? fileManager = null) : Day(inputFilePath, fileManager)
     {
         private readonly List<ClawMachine> _machines = [];
-        public override long Part1()
+        public override T Part1<T>()
         {
             CreateClawMachines();
             _machines.ForEach(m => m.GaussJordan());
-            return _machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
+            return (T)(object)_machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             CreateClawMachines(10000000000000);
             _machines.ForEach(m => m.GaussJordan());
-            return _machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
+            return (T)(object)_machines.Where(m => m.HasSolution).Sum(m => m.ButtonATotalCost + m.ButtonBTotalCost);
         }
 
         #region Private methods

@@ -12,18 +12,18 @@ namespace AdventOfCode.Events.Year2024
             _stonesCount = InputLines.First().Split(' ').Select(s => new KeyValuePair<string, long>(s, 1)).ToDictionary();
         }
 
-        public override long Part1()
+        public override T Part1<T>()
         {
             Blink(25);
 
-            return _stonesCount.Sum(s => s.Value);
+            return (T)(object)_stonesCount.Sum(s => s.Value);
         }
 
-        public override long Part2()
+        public override T Part2<T>()
         {
             Blink(75);
 
-            return _stonesCount.Sum(s => s.Value);
+            return (T)(object)_stonesCount.Sum(s => s.Value);
         }
 
         #region Private methods
